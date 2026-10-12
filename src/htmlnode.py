@@ -31,7 +31,7 @@ class HTMLNode:
 
 class LeafNode(HTMLNode):
     def __init__(self, tag: str | None, value: str | None, props: dict | None = None):
-        super(LeafNode, self).__init__(tag, value, None, props)
+        super(LeafNode, self).__init__(tag, value, None, props)  # pyright: ignore
 
     def to_html(self):
         if self.value is None:

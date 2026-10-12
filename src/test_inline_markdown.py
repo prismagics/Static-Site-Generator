@@ -6,6 +6,7 @@ from inline_markdown import (
     split_nodes_delimiter,
     split_nodes_image,
     split_nodes_link,
+    text_to_textnodes,
 )
 from textnode import TextNode, TextType
 
@@ -24,7 +25,7 @@ class Test_Inline_Markdown(unittest.TestCase):
             lst,
         )
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(Exception):  # pyright: ignore
             split_nodes_delimiter(
                 [TextNode("1 *2 3", TextType.TEXT)], "*", TextType.BOLD
             )
@@ -105,4 +106,24 @@ class Test_Inline_Markdown(unittest.TestCase):
         self.assertListEqual([TextNode("Nada", TextType.TEXT)], new_nodes)
 
     def test_text_to_textnode(self):
-        pass
+        ans = [
+            TextNode("This is ", TextType.TEXT),
+            TextNode("text", TextType.BOLD),
+            TextNode(" with an ", TextType.TEXT),
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" word and a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" and an ", TextType.TEXT),
+            TextNode(
+                "obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"
+            ),
+            TextNode(" and a ", TextType.TEXT),
+            TextNode("link", TextType.LINK, "https://boot.dev"),
+        ]
+
+        self.assertListEqual(
+            text_to_textnodes(
+                "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+            ),
+            ans,
+        )
